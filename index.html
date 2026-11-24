@@ -96,18 +96,15 @@ body.sinG .g-only{display:none!important}
 .ahora{position:absolute;left:-6px;right:0;border-top:2px solid #e0245e;z-index:3;pointer-events:none}
 .ahora::before{content:"";position:absolute;left:-4px;top:-6px;width:10px;height:10px;border-radius:50%;background:#e0245e}
 
-/* Texturas por tipo (sirven en cualquier color) */
-.t-clase,.t-estudio,.t-gym,.t-otro{position:relative}
-.t-clase{border-radius:6px;background-color:color-mix(in srgb,var(--c) 80%,#7a1f3d);box-shadow:inset 6px 0 0 rgba(0,0,0,.25)}
-.t-estudio{border-radius:14px;border:1.5px solid color-mix(in srgb,var(--c) 70%,#000 10%);background-color:color-mix(in srgb,var(--c) 45%,#fff);background-image:repeating-linear-gradient(180deg,transparent 0 12px,rgba(70,40,120,.10) 12px 13px)}
-.t-estudio::before{content:"";position:absolute;left:8px;top:0;bottom:0;border-left:2px solid rgba(225,40,100,.3)}
-.t-gym{border-radius:22px;border:2px solid color-mix(in srgb,var(--c) 75%,#000 12%);background-color:color-mix(in srgb,var(--c) 45%,#fff);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 0 2px,transparent 2px 8px),repeating-linear-gradient(-45deg,rgba(255,255,255,.5) 0 2px,transparent 2px 8px)}
-.t-otro{border-radius:12px;border:2px dashed color-mix(in srgb,var(--c) 80%,#000 20%);background-color:color-mix(in srgb,var(--c) 55%,transparent);background-image:radial-gradient(color-mix(in srgb,var(--c) 70%,transparent) 1.3px,transparent 2px);background-size:12px 12px;backdrop-filter:blur(2px)}
-[data-tema=oscuro] .blk.t-otro{color:#f3eefc}
+/* Recuadros por tipo: color liso + icono en el borde (sin texturas) */
+.t-clase,.t-estudio,.t-gym,.t-otro{background-color:var(--c);position:relative;border-radius:12px;border:1.5px solid color-mix(in srgb,var(--c) 70%,#000 18%)}
+.blk .ico{position:absolute;left:0;top:0;width:26px;height:26px;display:grid;place-items:center;font-size:15px;line-height:1;
+  background:rgba(255,255,255,.8);border-right:1.5px solid color-mix(in srgb,var(--c) 70%,#000 18%);border-bottom:1.5px solid color-mix(in srgb,var(--c) 70%,#000 18%);border-radius:0 0 12px 0}
+[data-tema=oscuro] .blk .ico{background:rgba(255,255,255,.9)}
 
 .blk{position:absolute;left:6px;right:6px;padding:5px 10px;color:#2a0f22;font-size:14px;font-weight:700;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.12);cursor:pointer;transition:transform .15s}
 .blk:active{transform:scale(.98)}
-.blk.t-estudio{padding-left:16px}.blk.t-gym{padding-left:14px}.blk.t-clase{padding-left:14px}
+.blk{padding-left:34px}
 .blk .t{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:62px}
 .blk small{display:block;font-size:11px;font-weight:500;opacity:.8}
 .blk .tag{position:absolute;right:6px;top:4px;font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 6px;border-radius:8px;background:rgba(255,255,255,.82);color:#5a2a4a;text-transform:uppercase;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -600,7 +597,7 @@ function renderDia(){
       if(hg>=58)extra=`<div class="sp"><i style="width:${ok*100/x.sub.length}%"></i></div>`;
       if(hg>=78)extra+=`<small class="nx">🧩 ${ok}/${x.sub.length}${sig?' · Sigue: '+esc(sig.t):' · ¡Todo listo!'}</small>`;
       else if(hg>=58)extra+=`<small>🧩 ${ok}/${x.sub.length} pasos</small>`}
-    d.innerHTML=`<span class="tag">${esc(nomDe(x))}</span><span class="t">${icoDe(x)} ${esc(x.titulo)}</span><small>${h12(x.ini)} – ${h12(x.fin)}${hecho?' · ✅ hecho':''}</small>${extra}`;
+    d.innerHTML=`<span class="ico">${icoDe(x)}</span><span class="tag">${esc(nomDe(x))}</span><span class="t">${esc(x.titulo)}</span><small>${h12(x.ini)} – ${h12(x.fin)}${hecho?' · ✅ hecho':''}</small>${extra}`;
     d.onclick=e=>{e.stopPropagation();abrir(x)};tl.appendChild(d)});
   if(esEstaSem&&diaHoy===dia){const m=hoy.getHours()*60+hoy.getMinutes();
     if(m>=H0*60&&m<H1*60)tl.insertAdjacentHTML('beforeend',`<div class="ahora" style="top:${(m-H0*60)*PX}px"></div>`)}
