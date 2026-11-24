@@ -97,12 +97,13 @@ body.sinG .g-only{display:none!important}
 .ahora::before{content:"";position:absolute;left:-4px;top:-6px;width:10px;height:10px;border-radius:50%;background:#e0245e}
 
 /* Texturas por tipo (sirven en cualquier color) */
-.t-clase,.t-estudio,.t-gym,.t-otro{background-color:var(--c);position:relative}
-.t-clase{border-radius:6px;background-image:repeating-linear-gradient(135deg,rgba(255,255,255,.42) 0 5px,transparent 5px 13px);box-shadow:inset 6px 0 0 rgba(0,0,0,.22)}
-.t-estudio{border-radius:14px;border:1.5px solid rgba(60,20,90,.15);background-image:repeating-linear-gradient(180deg,transparent 0 12px,rgba(70,40,120,.16) 12px 13px)}
-.t-estudio::before{content:"";position:absolute;left:8px;top:0;bottom:0;border-left:2px solid rgba(225,40,100,.4)}
-.t-gym{border-radius:22px;border:2px solid rgba(0,0,0,.2);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.45) 0 2px,transparent 2px 8px),repeating-linear-gradient(-45deg,rgba(255,255,255,.45) 0 2px,transparent 2px 8px)}
-.t-otro{border-radius:12px;border:2px dashed rgba(0,0,0,.3);background-image:radial-gradient(rgba(255,255,255,.75) 1.6px,transparent 2.3px);background-size:10px 10px}
+.t-clase,.t-estudio,.t-gym,.t-otro{position:relative}
+.t-clase{border-radius:6px;background-color:color-mix(in srgb,var(--c) 80%,#7a1f3d);box-shadow:inset 6px 0 0 rgba(0,0,0,.25)}
+.t-estudio{border-radius:14px;border:1.5px solid color-mix(in srgb,var(--c) 70%,#000 10%);background-color:color-mix(in srgb,var(--c) 45%,#fff);background-image:repeating-linear-gradient(180deg,transparent 0 12px,rgba(70,40,120,.10) 12px 13px)}
+.t-estudio::before{content:"";position:absolute;left:8px;top:0;bottom:0;border-left:2px solid rgba(225,40,100,.3)}
+.t-gym{border-radius:22px;border:2px solid color-mix(in srgb,var(--c) 75%,#000 12%);background-color:color-mix(in srgb,var(--c) 45%,#fff);background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.5) 0 2px,transparent 2px 8px),repeating-linear-gradient(-45deg,rgba(255,255,255,.5) 0 2px,transparent 2px 8px)}
+.t-otro{border-radius:12px;border:2px dashed color-mix(in srgb,var(--c) 80%,#000 20%);background-color:color-mix(in srgb,var(--c) 55%,transparent);background-image:radial-gradient(color-mix(in srgb,var(--c) 70%,transparent) 1.3px,transparent 2px);background-size:12px 12px;backdrop-filter:blur(2px)}
+[data-tema=oscuro] .blk.t-otro{color:#f3eefc}
 
 .blk{position:absolute;left:6px;right:6px;padding:5px 10px;color:#2a0f22;font-size:14px;font-weight:700;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,.12);cursor:pointer;transition:transform .15s}
 .blk:active{transform:scale(.98)}
