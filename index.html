@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,11 +12,11 @@
 :root{
   --bg:#fdf3fa;--dot:#f7d9ee;--card:#fff;--card2:#fbf2fa;--txt:#2d1b3d;--sub:#8b7a9b;--line:#f0e2f1;
   --a1:#f15bb5;--a2:#a35cf0;--a3:#7b2ff7;--grad:linear-gradient(120deg,var(--a1),var(--a2));
-  --soft:#fde6f3;--warm:#fff4e6;--warmTxt:#8a4b12;--sombra:0 4px 18px rgba(163,92,240,.10)
+  --soft:#fde6f3;--warm:#fff4e6;--warmTxt:#8a4b12;--okBg:#e3f7ea;--okTxt:#1d7a45;--sombra:0 4px 18px rgba(163,92,240,.10)
 }
 [data-tema=oscuro]{
   --bg:#1c1d38;--dot:#26284a;--card:#272a4c;--card2:#31345b;--txt:#f3eefc;--sub:#a9a5c9;--line:#3b3e68;
-  --soft:#3a3463;--warm:#3d3355;--warmTxt:#ffd6a5;--sombra:0 4px 18px rgba(0,0,0,.25)
+  --soft:#3a3463;--warm:#3d3355;--warmTxt:#ffd6a5;--okBg:#24423a;--okTxt:#8fe3b0;--sombra:0 4px 18px rgba(0,0,0,.25)
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--txt);padding-bottom:110px;
@@ -209,7 +210,18 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
 /* Gastos */
 .gres{display:flex;gap:8px;margin:8px 0 4px}
 .gres div{flex:1;background:var(--warm);border-radius:14px;padding:10px;font-size:12px;color:var(--warmTxt)}
-.gres b{display:block;font-size:20px}
+.gres b{display:block;font-size:17px}
+.gres .gi{background:var(--okBg);color:var(--okTxt)}
+.gsem{font-size:12px;color:var(--sub);text-align:center;margin-bottom:4px}
+.movs{display:flex;background:var(--card2);border-radius:14px;padding:3px;margin:8px 0 2px}
+.movs button{flex:1;border:0;background:none;color:var(--sub);font-weight:800;font-size:14px;padding:9px;border-radius:11px}
+.movs button.on[data-m=gas]{background:var(--warm);color:var(--warmTxt)}
+.movs button.on[data-m=ing]{background:var(--okBg);color:var(--okTxt)}
+.gitem .mt.in{color:var(--okTxt)}
+.pos{color:var(--okTxt)!important}.neg{color:#c0365a!important}
+#gdias button.coni{background:var(--okBg);color:var(--okTxt);font-weight:700}
+.mg.in{background:var(--okBg);color:var(--okTxt)}
+.kp small{display:block;font-size:10px;margin-top:2px}
 .gitem{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:var(--card2);margin-top:6px}
 .gitem .ic{font-size:20px}
 .gitem .cn{flex:1;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis}
@@ -278,7 +290,7 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
       <div class="lbl">📅 Semana</div>
       <div class="mid" id="fSem"></div>
       <div class="bar"><i id="barSem"></i></div>
-      <button class="gbtn g-only" onclick="abrirG(dia)">💵 Gastos del día <b id="fGasto">S/ 0.00</b></button>
+      <button class="gbtn g-only" onclick="abrirG(dia)">💵 Dinero del día <b id="fGasto">S/ 0.00</b></button>
     </div>
   </section>
 
@@ -294,7 +306,7 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
     <div class="kp">
       <div>Tareas hechas<b id="mTar">0/0</b></div>
       <div>Exámenes<b id="mEx">0</b></div>
-      <div class="gk g-only">Gastos<b id="mGas">S/ 0</b></div>
+      <div class="gk g-only">Balance<b id="mGas">S/ 0</b><small id="mGas2"></small></div>
     </div>
     <div class="bar" style="margin:10px 0 0"><i id="mBar"></i></div>
   </section>
@@ -309,7 +321,7 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
     <div class="kp">
       <div>Tareas hechas<b id="aTar">0/0</b></div>
       <div>Exámenes<b id="aEx">0</b></div>
-      <div class="gk g-only">Gastos<b id="aGas">S/ 0</b></div>
+      <div class="gk g-only">Balance<b id="aGas">S/ 0</b><small id="aGas2"></small></div>
     </div>
   </section>
   <div id="agrid"></div>
@@ -378,20 +390,26 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
 <!-- Gastos -->
 <div class="modal" id="mG" onclick="if(event.target===this)hide('mG')">
   <form class="hoja" id="fg" onsubmit="event.preventDefault();agregarG()">
-    <h2 id="tG">💵 Gastos</h2>
+    <h2 id="tG">💵 Dinero</h2>
     <div class="gres">
-      <div>Total del día<b id="gDia">S/ 0.00</b></div>
-      <div>Total de la semana<b id="gSem">S/ 0.00</b></div>
+      <div class="gi">Ingresos<b id="gIng">S/ 0.00</b></div>
+      <div>Gastos<b id="gDia">S/ 0.00</b></div>
+      <div style="background:var(--card2);color:var(--sub)">Balance<b id="gBal">S/ 0.00</b></div>
     </div>
+    <div class="gsem" id="gSem"></div>
     <div id="gLista"></div>
-    <label>¿En qué gastaste?</label>
+    <div class="movs" id="movs">
+      <button type="button" data-m="gas" onclick="setMov('gas')">➖ Gasto</button>
+      <button type="button" data-m="ing" onclick="setMov('ing')">➕ Ingreso</button>
+    </div>
+    <label id="gLblC">¿En qué gastaste?</label>
     <input name="concepto" placeholder="Ej: Almuerzo, pasaje, fotocopias" required>
     <label>Monto</label>
     <input name="monto" type="number" step="0.01" min="0.01" inputmode="decimal" placeholder="0.00" required>
     <label>Categoría</label>
     <div class="cats" id="cats"></div>
     <div class="btns">
-      <button type="submit" class="pri">➕ Agregar gasto</button>
+      <button type="submit" class="pri" id="gBtn">➕ Agregar gasto</button>
       <button type="button" class="sec" onclick="hide('mG')">Cerrar</button>
     </div>
   </form>
@@ -404,7 +422,7 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
     <label>Tu nombre (para el saludo)</label>
     <input id="cNom" placeholder="Ej: Mariya" oninput="S.cfg.nombre=this.value.trim();save();render()">
     <div class="ajuste">
-      <div>💵 Registrar mis gastos<small>Muestra el panel de gastos y los totales por día, mes y año</small></div>
+      <div>💵 Registrar mi dinero<small>Ingresos y gastos, con balance por día, mes y año</small></div>
       <label class="sw-t"><input type="checkbox" id="cGas" onchange="S.cfg.gastos=this.checked;save();render()"><i></i></label>
     </div>
     <div class="fila g-only" style="margin-top:2px"><div><label>Moneda</label><input id="cMon" maxlength="4" oninput="S.cfg.mon=this.value||'S/';save();render()"></div></div>
@@ -422,8 +440,8 @@ input:focus,select:focus{outline:none;border-color:var(--a1)}
   <div class="hoja lista">
     <h2>Opciones</h2>
     <button onclick="hide('mM');abrirEx(null)">📌 Agregar examen o entrega</button>
-    <button class="g-only" onclick="hide('mM');abrirG(dia)">💵 Gastos del día seleccionado</button>
-    <button onclick="hide('mM');abrirAjustes()">⚙️ Ajustes (gastos, tema, nombre)</button>
+    <button class="g-only" onclick="hide('mM');abrirG(dia)">💵 Ingresos y gastos del día</button>
+    <button onclick="hide('mM');abrirAjustes()">⚙️ Ajustes (dinero, tema, nombre)</button>
     <button onclick="irHoy()">📍 Ir a hoy</button>
     <button onclick="exportar()">💾 Guardar copia de seguridad</button>
     <button onclick="document.getElementById('imp').click()">📂 Cargar copia de seguridad</button>
@@ -442,6 +460,7 @@ const COLORES=['#f4b6c6','#e89bb0','#f9d3dc','#ff9ec7','#f78fb3','#ffb3d9','#d8b
 const TIPOS={clase:{ico:'📘',n:'Clase',c:'#f4b6c6'},estudio:{ico:'📝',n:'Estudio',c:'#ffd6a5'},gym:{ico:'🏋️',n:'Gym',c:'#c8e6c9'},otro:{ico:'⭐',n:'Otro',c:'#d8b4e2'}};
 const EMOJIS=['⭐','💼','🎨','🎵','⛪','🍳','🧹','🛒','💊','📞','🎮','🐶','✈️','💤','❤️','🚗','📖','🧘'];
 const CATS={comida:'🍔 Comida',transporte:'🚌 Transporte',estudios:'📚 Estudios',salidas:'🎉 Salidas',otros:'🛒 Otros'};
+const CATS_IN={sueldo:'💼 Sueldo',familia:'👪 Familia',beca:'🎓 Beca',venta:'🛍️ Venta',regalo:'🎁 Regalo',otrosin:'💰 Otros'};
 const SUG={
   estudio:['Repasar teoría','Ver ejemplos resueltos','Resolver ejercicios','Revisar errores y anotar dudas'],
   clase:['Leer el tema antes','Tomar apuntes','Pasar apuntes en limpio'],
@@ -458,6 +477,8 @@ const minF=t=>t==='00:00'?1440:min(t);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const MON=()=>S.cfg.mon||'S/';
 const dinero=n=>`${MON()} ${(+n||0).toFixed(2)}`;
+const firmado=n=>(n>0?'+':n<0?'−':'')+dinero(Math.abs(n));
+const clsBal=n=>n>0?'pos':n<0?'neg':'';
 const corto=n=>n>=100?Math.round(n):(+n).toFixed(n%1?1:0);
 function h12(t){let[h,m]=t.split(':').map(Number);const s=(h>=12&&h<24)?'pm':'am';h=h%12||12;return m?`${h}:${pad(m)} ${s}`:`${h} ${s}`}
 function etiquetaHora(h){if(h===12)return'12 pm';if(h===24||h===0)return'12 am';return h<12?`${h} am`:`${h-12} pm`}
@@ -525,8 +546,12 @@ const $=id=>document.getElementById(id);
 const show=id=>$(id).classList.add('on');
 const hide=id=>$(id).classList.remove('on');
 const visibles=d=>S.bloques.filter(b=>b.dia===d&&(!b.sem||b.sem===sem));
-const totalDia=k=>(S.gastos[k]||[]).reduce((a,g)=>a+(+g.monto||0),0);
+// Los ingresos se guardan en la misma lista que los gastos, con tipo:'ing'
+const totalDia=k=>(S.gastos[k]||[]).filter(g=>g.tipo!=='ing').reduce((a,g)=>a+(+g.monto||0),0);
+const ingDia=k=>(S.gastos[k]||[]).filter(g=>g.tipo==='ing').reduce((a,g)=>a+(+g.monto||0),0);
+const balDia=k=>ingDia(k)-totalDia(k);
 const totalSem=()=>[0,1,2,3,4,5,6].reduce((a,i)=>a+totalDia(clave(fechaDia(i))),0);
+const ingSem=()=>[0,1,2,3,4,5,6].reduce((a,i)=>a+ingDia(clave(fechaDia(i))),0);
 
 // Progreso de un bloque en una semana (cuenta pasos a medias)
 function prog(b,wk){if(b.hecho===wk)return 1;if(b.sub&&b.sub.length)return b.sub.filter(s=>s.h===wk).length/b.sub.length;return 0}
@@ -572,9 +597,9 @@ function renderDia(){
     bt.className=(i===dia?'on':'')+(esEstaSem&&i===diaHoy?' hoy':'');
     bt.innerHTML=`${n}<br><small>${fechaDia(i).getDate()}</small>`;
     bt.onclick=()=>{dia=i;render()};dz.appendChild(bt);
-    if(S.cfg.gastos){const t=totalDia(clave(fechaDia(i))),g=document.createElement('button');
-      g.className=t>0?'con':'';g.title='Gastos del '+DIAS_L[i];
-      g.innerHTML=`<span>💵</span>${t>0?corto(t):'+'}`;
+    if(S.cfg.gastos){const k=clave(fechaDia(i)),t=totalDia(k),n=ingDia(k),bal=n-t,g=document.createElement('button');
+      g.className=(t>0||n>0)?(bal>=0&&n>0?'coni':'con'):'';g.title='Dinero del '+DIAS_L[i];
+      g.innerHTML=`<span>💵</span>${(t>0||n>0)?(bal>0?'+':bal<0?'−':'')+corto(Math.abs(bal)):'+'}`;
       g.onclick=()=>abrirG(i);gz.appendChild(g)}
   });
 
@@ -622,7 +647,8 @@ function renderFoco(esHoy){
   const ps=tot?Math.round(pp*100/tot):0;
   $('fSem').textContent=tot?`${ok} / ${tot} bloques (${ps}%)`:'Toca el horario para agregar bloques';
   $('barSem').style.width=ps+'%';
-  $('fGasto').textContent=dinero(totalDia(clave(fechaDia(dia))));
+  const kd=clave(fechaDia(dia)),bd=balDia(kd);
+  $('fGasto').textContent=firmado(bd);$('fGasto').className=clsBal(bd);
   if(p===100&&pctPrevio>=0&&pctPrevio<100){const r=$('ring');r.classList.remove('festejo');void r.offsetWidth;r.classList.add('festejo')}
   pctPrevio=p;
 }
@@ -648,20 +674,21 @@ function renderMes(){
   $('navLbl').textContent=titulo;$('mTit').textContent='Resumen de '+titulo;
   const ini=new Date(mesY,mesM,1),off=idxDia(ini),n=new Date(mesY,mesM+1,0).getDate(),hoyK=clave(new Date());
   let h=DIAS.map(d=>`<div class="mh">${d}</div>`).join('')+'<div></div>'.repeat(off);
-  let tot=0,ok=0,pp=0,gas=0,exs=0;
+  let tot=0,ok=0,pp=0,gas=0,ing=0,exs=0;
   for(let d=1;d<=n;d++){
-    const f=new Date(mesY,mesM,d),k=clave(f),st=statsDia(f),ex=exDe(k),g=totalDia(k),p=Math.round(st.p*100);
-    tot+=st.t.length;ok+=st.done;pp+=st.p*st.t.length;gas+=g;exs+=ex.length;
+    const f=new Date(mesY,mesM,d),k=clave(f),st=statsDia(f),ex=exDe(k),gt=totalDia(k),gi=ingDia(k),g=gi-gt,p=Math.round(st.p*100);
+    tot+=st.t.length;ok+=st.done;pp+=st.p*st.t.length;gas+=gt;ing+=gi;exs+=ex.length;
     const dots=st.t.slice(0,5).map(b=>`<i style="background:${b.color}"></i>`).join('')+(st.t.length>5?`<i style="background:var(--sub)"></i>`:'');
     h+=`<button class="mc${k===hoyK?' hoy':''}${k===selMes?' on':''}${st.t.length&&p===100?' full':''}" data-k="${k}">
       <span class="n">${d}</span>${ex.length?'<span class="pin">📌</span>':''}
       <div class="dots">${dots}</div>
-      ${S.cfg.gastos&&g>0?`<span class="mg">${corto(g)}</span>`:''}
+      ${S.cfg.gastos&&(gt>0||gi>0)?`<span class="mg${g>=0?' in':''}">${g>0?'+':g<0?'−':''}${corto(Math.abs(g))}</span>`:''}
       ${st.t.length?`<div class="mb"><i style="width:${p}%"></i></div>`:''}</button>`;
   }
   const z=$('mgrid');z.innerHTML=h;
   z.querySelectorAll('.mc').forEach(b=>b.onclick=()=>{selFecha(new Date(b.dataset.k+'T00:00'));render()});
-  $('mTar').textContent=`${ok}/${tot}`;$('mEx').textContent=exs;$('mGas').textContent=dinero(gas);
+  $('mTar').textContent=`${ok}/${tot}`;$('mEx').textContent=exs;
+  $('mGas').textContent=firmado(ing-gas);$('mGas').className=clsBal(ing-gas);$('mGas2').textContent=`↑ ${dinero(ing)} · ↓ ${dinero(gas)}`;
   $('mBar').style.width=(tot?Math.round(pp*100/tot):0)+'%';
   renderAgenda();
 }
@@ -676,7 +703,7 @@ function renderAgenda(){
     h+=`<button class="ag${hecho?' hecho':''}" data-i="${i}"><span class="sw ${tipoCls(b.tipo)}" style="--c:${b.color}">${icoDe(b)}</span>
       <div class="cn">${esc(b.titulo)}<small>${h12(b.ini)} – ${h12(b.fin)} · ${esc(nomDe(b))}${b.sub.length?` · 🧩 ${b.sub.filter(s=>s.h===wk).length}/${b.sub.length}`:''}</small></div>
       <span class="st">${b.tipo==='clase'?'':hecho?'✅':p+'%'}</span></button>`});
-  if(S.cfg.gastos){const g=totalDia(selMes);h+=`<div class="ag" style="background:var(--warm);color:var(--warmTxt)" id="agG"><span class="sw">💵</span><div class="cn" style="color:var(--warmTxt)">Gastos del día<small style="color:var(--warmTxt)">Toca para ver o agregar</small></div><span class="st" style="color:var(--warmTxt)">${dinero(g)}</span></div>`}
+  if(S.cfg.gastos){const gi=ingDia(selMes),gt=totalDia(selMes),b=gi-gt;h+=`<div class="ag" style="background:var(--warm);color:var(--warmTxt)" id="agG"><span class="sw">💵</span><div class="cn" style="color:var(--warmTxt)">Dinero del día<small style="color:var(--warmTxt)">↑ ${dinero(gi)} · ↓ ${dinero(gt)} · toca para ver o agregar</small></div><span class="st ${clsBal(b)}" style="color:var(--warmTxt)">${firmado(b)}</span></div>`}
   h+=`<button class="irdia" id="agIr">Ver horario de este día →</button>`;
   z.innerHTML=h;
   z.querySelectorAll('button.ag').forEach(el=>el.onclick=()=>{selFecha(f);abrir(L[+el.dataset.i])});
@@ -687,21 +714,22 @@ function renderAgenda(){
 // ---------- Vista año ----------
 function renderAno(){
   $('navLbl').textContent=anoY;$('aTit').textContent='Tu año '+anoY;
-  const hoy=new Date(),hoyK=clave(hoy);let H='',T=0,O=0,G=0,X=0;
+  const hoy=new Date(),hoyK=clave(hoy);let H='',T=0,O=0,G=0,I=0,X=0;
   for(let m=0;m<12;m++){
     const ini=new Date(anoY,m,1),off=idxDia(ini),n=new Date(anoY,m+1,0).getDate();
-    let cel='<i class="v"></i>'.repeat(off),tot=0,ok=0,gas=0;
+    let cel='<i class="v"></i>'.repeat(off),tot=0,ok=0,gas=0,ing=0;
     for(let d=1;d<=n;d++){const f=new Date(anoY,m,d),k=clave(f),st=statsDia(f),ex=exDe(k).length;
-      tot+=st.t.length;ok+=st.done;gas+=totalDia(k);X+=ex;
+      tot+=st.t.length;ok+=st.done;gas+=totalDia(k);ing+=ingDia(k);X+=ex;
       const bg=st.t.length?(st.p>0?`rgba(241,91,181,${(.25+.75*st.p).toFixed(2)})`:'rgba(163,92,240,.3)'):'';
       cel+=`<i class="${k===hoyK?'hoy ':''}${ex?'ex':''}"${bg?` style="background:${bg}"`:''}></i>`}
-    T+=tot;O+=ok;G+=gas;
+    T+=tot;O+=ok;G+=gas;I+=ing;
     const nom=may(ini.toLocaleDateString('es',{month:'long'})),act=anoY===hoy.getFullYear()&&m===hoy.getMonth();
     H+=`<button class="am${act?' act':''}" data-m="${m}"><h3>${nom}<small>${tot?Math.round(ok*100/tot)+'%':''}</small></h3><div class="amg">${cel}</div>
-      <div class="amf">${ok}/${tot} tareas${S.cfg.gastos&&gas>0?' · '+dinero(gas):''}</div></button>`}
+      <div class="amf">${ok}/${tot} tareas${S.cfg.gastos&&(gas>0||ing>0)?' · '+firmado(ing-gas):''}</div></button>`}
   const z=$('agrid');z.innerHTML=H;
   z.querySelectorAll('.am').forEach(b=>b.onclick=()=>{mesY=anoY;mesM=+b.dataset.m;selMes=null;vista='mes';render();window.scrollTo({top:0})});
-  $('aTar').textContent=`${O}/${T}`;$('aEx').textContent=X;$('aGas').textContent=dinero(G);
+  $('aTar').textContent=`${O}/${T}`;$('aEx').textContent=X;
+  $('aGas').textContent=firmado(I-G);$('aGas').className=clsBal(I-G);$('aGas2').textContent=`↑ ${dinero(I)} · ↓ ${dinero(G)}`;
 }
 
 // ---------- Bloques ----------
@@ -793,30 +821,39 @@ function borrarEx(){if(editEx&&confirm('¿Borrar?')){S.examenes=S.examenes.filte
 
 // ---------- Gastos ----------
 const fg=$('fg');
+let gMov='gas';
+function setMov(m){gMov=m;gCat=m==='ing'?'sueldo':'comida';
+  document.querySelectorAll('#movs button').forEach(b=>b.classList.toggle('on',b.dataset.m===m));
+  $('gLblC').textContent=m==='ing'?'¿De dónde vino el dinero?':'¿En qué gastaste?';
+  fg.concepto.placeholder=m==='ing'?'Ej: Pago de clases, mesada, venta':'Ej: Almuerzo, pasaje, fotocopias';
+  $('gBtn').textContent=m==='ing'?'➕ Agregar ingreso':'➕ Agregar gasto';
+  pintaCats()}
 function pintaCats(){const c=$('cats');c.innerHTML='';
-  Object.entries(CATS).forEach(([k,v])=>{const s=document.createElement('span');s.textContent=v;if(k===gCat)s.className='on';
+  Object.entries(gMov==='ing'?CATS_IN:CATS).forEach(([k,v])=>{const s=document.createElement('span');s.textContent=v;if(k===gCat)s.className='on';
     s.onclick=()=>{gCat=k;pintaCats()};c.appendChild(s)})}
 function abrirG(i){
   if(!S.cfg.gastos)return;
   dia=i;gFecha=clave(fechaDia(i));
-  $('tG').textContent=`💵 Gastos · ${DIAS_L[i]} ${fechaDia(i).toLocaleDateString('es',{day:'numeric',month:'short'})}`;
-  fg.reset();gCat='comida';pintaCats();pintaGastos();render();show('mG');
+  $('tG').textContent=`💵 Dinero · ${DIAS_L[i]} ${fechaDia(i).toLocaleDateString('es',{day:'numeric',month:'short'})}`;
+  fg.reset();setMov('gas');pintaGastos();render();show('mG');
 }
 function pintaGastos(){
   const L=S.gastos[gFecha]||[],z=$('gLista');
-  z.innerHTML=L.length?'':'<div class="vacio">Aún no hay gastos este día 🌸</div>';
-  L.forEach(g=>{const r=document.createElement('div');r.className='gitem';
-    const [ic,...nom]=(CATS[g.cat]||CATS.otros).split(' ');
-    r.innerHTML=`<span class="ic">${ic}</span><div class="cn">${esc(g.concepto)}<small>${nom.join(' ')}</small></div><span class="mt">${dinero(g.monto)}</span><button type="button" title="Borrar">✕</button>`;
-    r.querySelector('button').onclick=()=>{if(confirm('¿Borrar este gasto?')){S.gastos[gFecha]=L.filter(x=>x!==g);if(!S.gastos[gFecha].length)delete S.gastos[gFecha];save();pintaGastos();render()}};
+  z.innerHTML=L.length?'':'<div class="vacio">Aún no hay movimientos este día 🌸</div>';
+  L.forEach(g=>{const r=document.createElement('div');r.className='gitem';const esIn=g.tipo==='ing';
+    const [ic,...nom]=(esIn?(CATS_IN[g.cat]||CATS_IN.otrosin):(CATS[g.cat]||CATS.otros)).split(' ');
+    r.innerHTML=`<span class="ic">${ic}</span><div class="cn">${esc(g.concepto)}<small>${esIn?'Ingreso':'Gasto'} · ${nom.join(' ')}</small></div><span class="mt${esIn?' in':''}">${esIn?'+':'−'}${dinero(g.monto)}</span><button type="button" title="Borrar">✕</button>`;
+    r.querySelector('button').onclick=()=>{if(confirm(esIn?'¿Borrar este ingreso?':'¿Borrar este gasto?')){S.gastos[gFecha]=L.filter(x=>x!==g);if(!S.gastos[gFecha].length)delete S.gastos[gFecha];save();pintaGastos();render()}};
     z.appendChild(r)});
-  $('gDia').textContent=dinero(totalDia(gFecha));
-  $('gSem').textContent=dinero(totalSem());
+  const gi=ingDia(gFecha),gt=totalDia(gFecha),si=ingSem(),sg=totalSem();
+  $('gIng').textContent=dinero(gi);$('gDia').textContent=dinero(gt);
+  $('gBal').textContent=firmado(gi-gt);$('gBal').className=clsBal(gi-gt);
+  $('gSem').textContent=`Semana: ↑ ${dinero(si)} · ↓ ${dinero(sg)} · balance ${firmado(si-sg)}`;
 }
 function agregarG(){
   const m=parseFloat(String(fg.monto.value).replace(',','.'));
   if(!(m>0)){alert('Escribe un monto válido');return}
-  (S.gastos[gFecha]=S.gastos[gFecha]||[]).push({id:uid(),concepto:fg.concepto.value.trim(),monto:Math.round(m*100)/100,cat:gCat});
+  (S.gastos[gFecha]=S.gastos[gFecha]||[]).push({id:uid(),concepto:fg.concepto.value.trim(),monto:Math.round(m*100)/100,cat:gCat,tipo:gMov});
   save();fg.concepto.value='';fg.monto.value='';pintaGastos();render();fg.concepto.focus();
 }
 
